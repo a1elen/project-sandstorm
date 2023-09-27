@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falling Sand Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="menu">
+        <label for = "element"> 
+            Choose element:
+        </label>
+        <select id = "element">
+            <option value = "sand">Sand</option>
+            <option value = "water">Water</option>
+            <option value = "plant">Plant</option>
+            <option value = "fire">Fire</option>
+            <option value = "smoke">Smoke</option>
+            <option value = "wood">Wood</option>
+            <option value = "steam">Steam</option>
+        </select>
+    </div>
+    <script src="element.js"></script>
+    <script src="grid.js"></script>
+    <script src="game.js"></script>
+    <script>
+        setInterval(draw, 15);
+        setInterval(gameLoop, 15);
+    </script>
+</body>
+</html>
