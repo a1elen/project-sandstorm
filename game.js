@@ -125,10 +125,12 @@ function plantBehaviour(x, y) {
 function fireBehaviour(x, y) {
     let newCell = checkNeighboursType(getNeighbours(x, y), "air")
     if (newCell) {
-        move(x, y, newCell.x, newCell.y);
+        let dx = x - newCell.x;
+        let dy = y - newCell.y;
+        move(x, y, dx, dy);
     }
 
-    let nearbyWood = checkNeighboursType(getNeighbours(x, y), "wood")
+    let nearbyWood = checkNeighboursType(getNeighbours(x, y), "plant")
     if (nearbyWood) {
         let newCell = checkNeighboursType(getNeighbours(nearbyWood.x, nearbyWood.y), "air")
         if (newCell) {
