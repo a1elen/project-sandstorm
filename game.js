@@ -64,7 +64,7 @@ function update() {
                     }
                     place(i - 1, j, new Element(i - 1, j, "smoke", getColor("smoke")));
                     grid.getElement(i, j).counter++;
-                    //gasBehaviour(i, j)
+                    fireBehaviour(i, j)
                 } else if (grid.getElement(i, j).type == "smoke") {
                     if (grid.getElement(i, j).counter > 100) {
                         clear(i, j);
@@ -119,6 +119,24 @@ function plantBehaviour(x, y) {
         let newPlant = checkNeighboursType(getNeighbours(x, y), "air")
         clear(nearbyWater.x, nearbyWater.y);
         place(newPlant.x, newPlant.y, new Element(x - 1, y, "plant", getColor("plant")));
+    }
+}
+
+function fireBehaviour(x, y) {
+    let newCell = checkNeighboursType(getNeighbours(x, y), "air")
+    if (newCell) {
+        move(x, y, newCell.x, newCell.y);
+    }
+
+    let nearbyWood = checkNeighboursType(getNeighbours(x, y), "wood")
+    if (nearbyWood) {
+        let newCell = checkNeighboursType(getNeighbours(nearbyWood.x, nearbyWood.y), "air")
+        if (newCell) {
+            place(newCell.x, newCell.y, new Element(x - 1, y, "fire", getColor("fire")));
+        }
+        if (Math.random() > 0.5) {
+            clear(nearbyWood.x, nearbyWood.y);
+        }
     }
 }
 
@@ -198,6 +216,7 @@ function checkNeighboursType(neighbours, type) {
         }
     }
 }
+
 function checkCell(x, y) {
     if (!inBounds(x, y)) return;
     let element = grid.getElement(x, y);
