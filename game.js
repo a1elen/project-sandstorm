@@ -114,10 +114,11 @@ function gasBehaviour(x, y) {
 }
 
 function plantBehaviour(x, y) {
-    let nearbyWater = checkType(checkNeighbours(x, y));
+    let nearbyWater = checkNeighboursType(getNeighbours(x, y), "water");
     if (nearbyWater) {
+        let newPlant = checkNeighboursType(getNeighbours(x, y), "air")
         clear(nearbyWater.x, nearbyWater.y);
-        place(x - 1, y, new Element(x - 1, y, "plant", getColor("plant")));
+        place(newPlant.x, newPlant.y, new Element(x - 1, y, "plant", getColor("plant")));
     }
 }
 
@@ -189,25 +190,31 @@ function moveDownDiag(i, j) {
     }   
 }
 
-function checkType(neighbours) {
+function checkNeighboursType(neighbours, type) {
+    shuffle(neighbours);
     for (let i = 0; i < neighbours.length; i++) {
-        if (neighbours[i] && neighbours[i].type == "water") {
+        if (neighbours[i] && neighbours[i].type == type) {
             return neighbours[i];
         }
     }
 }
+function checkCell(x, y) {
+    if (!inBounds(x, y)) return;
+    let element = grid.getElement(x, y);
+    return element;
+}
 
-function unoccupiedNeighbours(x, y) {
+function getNeighbours(x, y) {
     let neighbours = []
-    neighbours.push(!checkOccupied(x+1, y));
-    neighbours.push(!checkOccupied(x-1, y));
-    neighbours.push(!checkOccupied(x, y+1));
-    neighbours.push(!checkOccupied(x, y-1));
+    neighbours.push(checkCell(x+1, y));
+    neighbours.push(checkCell(x-1, y));
+    neighbours.push(checkCell(x, y+1));
+    neighbours.push(checkCell(x, y-1));
     
-    neighbours.push(!checkOccupied(x+1, y+1));
-    neighbours.push(!checkOccupied(x-1, y-1));
-    neighbours.push(!checkOccupied(x+1, y-1));
-    neighbours.push(!checkOccupied(x-1, y+1));
+    neighbours.push(checkCell(x+1, y+1));
+    neighbours.push(checkCell(x-1, y-1));
+    neighbours.push(checkCell(x+1, y-1));
+    neighbours.push(checkCell(x-1, y+1));
     return neighbours;
 }
 
@@ -317,4 +324,19 @@ function draw() {
     }
 
     onMouseDown();
+}
+
+function randomRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffle(arr) {
+    let temp, r;
+    for (let i = 1; i < arr.length; i++) {
+        r = randomRange(0, i);
+        temp = arr[i];
+        arr[i] = arr[r];
+        arr[r] = temp;
+    }
+    return arr;
 }
