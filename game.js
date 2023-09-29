@@ -132,7 +132,7 @@ function fireBehaviour(x, y) {
         move(x, y, dx, dy);
     }
 
-    let newCell = checkNeighboursType(getNeighbours(x, y), "air")
+    newCell = checkNeighboursType(getNeighbours(x, y), "air")
     if (newCell) {
         place(newCell.x, newCell.y, new Element(x - 1, y, "smoke", getColor("smoke")));
     }
