@@ -290,6 +290,8 @@ function checkSwap(x, y, dx, dy) {
     if (firstState && secondState) {
         if (firstState == "plasma" && secondState == "gas") {
             swap(x, y, x + dx, y + dy);
+        } else if (firstState == "liquid" && secondState == "gas") {
+            swap(x, y, x + dx, y + dy);
         }
     }
 }
