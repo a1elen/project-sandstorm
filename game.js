@@ -117,8 +117,10 @@ function plantBehaviour(x, y) {
     let nearbyWater = checkNeighboursType(getNeighbours(x, y), "water");
     if (nearbyWater) {
         let newPlant = checkNeighboursType(getNeighbours(x, y), "air")
-        clear(nearbyWater.x, nearbyWater.y);
-        place(newPlant.x, newPlant.y, new Element(x - 1, y, "plant", getColor("plant")));
+        if (newPlant) {
+            clear(nearbyWater.x, nearbyWater.y);
+            place(newPlant.x, newPlant.y, new Element(x - 1, y, "plant", getColor("plant")));
+        }
     }
 }
 
