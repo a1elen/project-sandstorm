@@ -65,7 +65,7 @@ function update() {
                     grid.getElement(i, j).counter++;
                     fireBehaviour(i, j)
                 } else if (grid.getElement(i, j).type == "smoke") {
-                    if (grid.getElement(i, j).counter > 100) {
+                    if (grid.getElement(i, j).counter > 25) {
                         clear(i, j);
                     } 
                     gasBehaviour(i, j);
@@ -100,7 +100,9 @@ function liquidBehaviour(x, y) {
 }
 
 function gasBehaviour(x, y) {
-    grid.getElement(x, y).counter++;
+    if (checkNeighboursType(getNeighbours(x, y), "air")) {
+        grid.getElement(x, y).counter++;
+    }
     if (Math.random() > 0.25) {
         if (!checkOccupied(x - 1, y)) {
             move(x, y, -1, 0);
@@ -131,7 +133,7 @@ function fireBehaviour(x, y) {
         move(x, y, dx, dy);
     }
 
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.75) {
         spawnSmoke(x, y);
     }
 
