@@ -65,14 +65,14 @@ function update() {
                     grid.getElement(i, j).counter++;
                     fireBehaviour(i, j)
                 } else if (grid.getElement(i, j).type == "smoke") {
-                    if (grid.getElement(i, j).counter > 25) {
+                    if (grid.getElement(i, j).counter > 50) {
                         clear(i, j);
                     } 
                     gasBehaviour(i, j);
                 } else if (grid.getElement(i, j).type == "wood") {
 
                 } else if (grid.getElement(i, j).type == "steam") {
-                    if (grid.getElement(i, j).counter > 200) {
+                    if (grid.getElement(i, j).counter > 100) {
                         clear(i, j);
                         place(i, j, new Element(i - 1, j, "water", getColor("water")))
                     } 
