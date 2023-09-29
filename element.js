@@ -12,6 +12,10 @@ class Element {
             this.state = "dust";
         } else if (this.type == "water") {
             this.state = "liquid";
+        } else if (this.type == "smoke") {
+            this.state = "gas";
+        } else if (this.type == "fire") {
+            this.state = "plasma";
         }
     }
 }

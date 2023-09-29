@@ -132,6 +132,11 @@ function fireBehaviour(x, y) {
         move(x, y, dx, dy);
     }
 
+    let newCell = checkNeighboursType(getNeighbours(x, y), "air")
+    if (newCell) {
+        place(newCell.x, newCell.y, new Element(x - 1, y, "smoke", getColor("smoke")));
+    }
+
     let nearbyWood = checkNeighboursType(getNeighbours(x, y), "plant")
     if (nearbyWood) {
         let newCell = checkNeighboursType(getNeighbours(nearbyWood.x, nearbyWood.y), "air")
@@ -267,13 +272,26 @@ function checkOccupied(x, y) {
 
 function move(x, y, dx, dy) {
     if (!inBounds(x + dx, y + dy)) return;
-    if (checkOccupied(x + dx, y + dy)) return;
+    if (checkOccupied(x + dx, y + dy)) {
+        checkSwap(x, y, dx, dy);
+        return;
+    }
 
     let element = grid.getElement(x, y)
 
     place(x + dx, y + dy, element);
     clear(x, y);
     grid.getElement(x + dx, y + dy).moved = true;
+}
+
+function checkSwap(x, y, dx, dy) {
+    let firstState = grid.getElement(x, y).state;
+    let secondState = grid.getElement(x + dx, y + dy).state;
+    if (firstState && secondState) {
+        if (firstState == "plasma" && secondState == "gas") {
+            swap(x, y, x + dx, y + dy);
+        }
+    }
 }
 
 function place(x, y, element) {
