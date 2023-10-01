@@ -196,29 +196,19 @@ function moveSideways(i, j) {
 }
 
 function moveDown(x, y) {
-    if (!checkOccupied(x + 1, y)) {
-        move(x, y, 1, 0);
-    } else {
+    if (!move(x, y, 1, 0)) {
         moveDownDiag(x, y);
     }
 }
 
 function moveDownDiag(i, j) {
     if (Math.random() > 0.5) {
-        if (!checkOccupied(i + 1, j + 1) ) {
-            move(i, j, 1, 1);
-        } else {
-            if (!checkOccupied(i + 1, j - 1) ) {
-                move(i, j, 1, -1);
-            }
+        if (!move(i, j, 1, 1)) {
+            move(i, j, 1, -1);
         }
     } else {
-        if (!checkOccupied(i + 1, j - 1) ) {
-            move(i, j, 1, -1);
-        } else {
-            if (!checkOccupied(i + 1, j + 1) ) {
-                move(i, j, 1, 1);
-            }
+        if (!move(i, j, 1, -1)) {
+            move(i, j, 1, 1);
         }
     }   
 }
@@ -288,6 +278,7 @@ function move(x, y, dx, dy) {
     place(x + dx, y + dy, element);
     clear(x, y);
     grid.getElement(x + dx, y + dy).moved = true;
+    return true;
 }
 
 function checkSwap(x, y, dx, dy) {
