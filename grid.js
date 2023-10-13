@@ -11,7 +11,7 @@ class Grid {
         for (let i = 0; i < this.numRows; i++) {
             grid[i] = [];
             for (let j = 0; j < this.numCols; j++) {
-                grid[i][j] = new Element(i, j, "air", getColor("air"));
+                grid[i][j] = new Air(i, j);
             }
         }
         return grid;
@@ -30,10 +30,10 @@ class Grid {
 
     setElement(row, col, element) {
         this.grid[row][col] = element;
-        if (this.grid[row][col]) {
+        //if (this.grid[row][col]) {
             this.grid[row][col].x = row;
             this.grid[row][col].y = col;
-        }
+        //}
     }
 
     getElement(row, col) {
