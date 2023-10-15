@@ -79,7 +79,7 @@ function onMouseDown() {
         for (let i = 0; i < cursorSize; i++) {
             for (let j = 0; j < cursorSize; j++) {
                 if (isFree(hoveredCell[1] + i, hoveredCell[0] + j)) {
-                    console.log(i + " + " + j)
+                    //console.log(i + " + " + j)
                     setCell(hoveredCell[1] + i, hoveredCell[0] + j, selectedElement);
                 }
             }
