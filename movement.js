@@ -14,15 +14,22 @@ function fallDown(x, y) {
 UTILITY FUNCTIONS
 */
 
-function move(x, y, dx, dy) {
-    let newX = x + dx;
-    let newY = y + dy;
-    let className = getCell(x, y).name;
+function checkForSwap(first, second) {
+    if (first.state == "solid" && second.state == "liquid") {
+        if (first.density > second.density) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
-    if (!inBounds(newX, newY)) return;
-
-    grid[x][y].x = newX;
-    grid[x][y].y = newY;
+function isFree(x, y) {
+    if (grid.getElement(x, y).name == "Air") {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function clear(x, y) {
@@ -31,15 +38,21 @@ function clear(x, y) {
 }
 
 function getCell(x, y) {
-    if (grid[x][y]) {
-        return grid[x][y];
+    let cell = {
+        x: grid.getElement(x, y).x,
+        y: grid.getElement(x, y).x,
+        name: grid.getElement(x, y).name,
+        color: grid.getElement(x, y).color,
+        density: grid.getElement(x, y).density
     }
+    return cell;
 }
 
-function setCell(x, y, className) {
+function setCell(x, y, className, color) {
     let newElement = (Function('return new ' + className)) ();
     newElement.x = x;
     newElement.y = y;
+    if (color) newElement.color = color;
     grid.setElement(x, y, newElement);
 }
 

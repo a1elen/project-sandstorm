@@ -8,6 +8,8 @@ canvas.height = numCols * gridSize;
 canvas.width = numRows * gridSize;
 
 let selectedElement = 'Sand';
+let cursorSize = 1;
+
 let grid = new Grid(numRows, numCols, gridSize);
 
 let isMouseDown = false;
@@ -35,6 +37,8 @@ function update() {
             }
         }
     }
+
+    onMouseDown();
 }
 
 function draw() {
@@ -42,22 +46,22 @@ function draw() {
     grid.draw(ctx);
     if (hoveredCell) {
         ctx.strokeStyle = "white";
-        ctx.strokeRect(hoveredCell[0] * 8, hoveredCell[1] * 8, 8, 8, 8);
+        ctx.strokeRect(hoveredCell[0] * 8, hoveredCell[1] * 8, 8*cursorSize, 8*cursorSize, 8);
     }
 
-    onMouseDown();
+    
 }
 
 /*
 CONTROLS
 */
 
-function handleClick(event) {
-    grid.setElement(hoveredCell[0], hoveredCell[1], new Element(selectedElement, getColor(selectedElement)));
-}
-
 document.getElementById("element").addEventListener("change", (e) => {
     selectedElement = e.target.value;
+})
+
+document.getElementById("range").addEventListener("change", (e) => {
+    cursorSize = e.target.value;
 })
 
 let hoveredCell = null;
@@ -72,7 +76,14 @@ canvas.addEventListener('mouseup', (e) => {
 
 function onMouseDown() {
     if (isMouseDown) {
-        setCell(hoveredCell[1], hoveredCell[0], selectedElement);
+        for (let i = 0; i < cursorSize; i++) {
+            for (let j = 0; j < cursorSize; j++) {
+                if (isFree(hoveredCell[1] + i, hoveredCell[0] + j)) {
+                    console.log(i + " + " + j)
+                    setCell(hoveredCell[1] + i, hoveredCell[0] + j, selectedElement);
+                }
+            }
+        }  
     }
 }
 

@@ -3,15 +3,70 @@ class Element {
         this.x = x;
         this.y = y;
         this.name = "default";
-        this.color = "#000";
+        this.colors = ["#000"];
         this.state = "default";
+        this.density = 1;
 
-        this.moved = false;
+        this.moved = true;
         this.counter = 0;
+
+        this.init();
+    }
+
+    init() {
+        if (this.colors.length > 1) {
+            this.color = this.colors[randomRange(0, this.colors.length)];
+        }
     }
 
     update() {
 
+    }
+
+    move(dx, dy) {
+        let newX = this.x + dx;
+        let newY = this.y + dy;
+    
+        if (!inBounds(newX, newY)) return;
+
+        if (isFree(newX, newY)) {
+            setCell(newX, newY, this.name, this.color);
+            setCell(this.x, this.y, "Air");
+            return true;
+        } else if (checkForSwap(this, grid.getElement(newX, newY))) {
+            this.swap(this.x, this.y, newX, newY);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    swap(x1, y1, x2, y2) {
+        
+        let first = grid.getElement(x1, y2);
+        let second = grid.getElement(x2, y2);
+
+        setCell(x1, y1, "Air");
+        setCell(x2, y2, "Air");
+
+        setCell(x2, y2, this.name, this.color);
+        setCell(x1, y1, second.name, second.color);
+
+        return true;
+    }
+
+    colorMove() {
+        let dir = randomRange(-1, 1);
+
+        if (inBounds(this.x, this.y + dir) && !isFree(this.x, this.y + dir)) {
+            if (getCell(this.x, this.y + dir).name == this.name) {
+                let second = grid.getElement(this.x, this.y + dir);
+
+                let tempColor = second.color;
+                second.color = this.color;
+                this.color = tempColor;
+            }
+        }
     }
 }
 
@@ -23,6 +78,7 @@ class Solid extends Element {
     constructor() {
         super();
         this.state = "solid";
+        this.movable;
     }
 }
 
@@ -55,13 +111,29 @@ class Sand extends Solid {
     constructor() {
         super();
         this.name = "Sand";
-        this.color = 'yellow';
+        this.colors = ["yellow", "#ffea2b", "#dedb26"];
+        this.movable = true;
+        this.density = 1602;
+
+        this.init();
     }
     
     update() {
-        if (fallDown(this.x, this.y)) {
-            move()
-        } 
+
+
+        if (!this.movable) return;
+
+        if (!super.move(1, 0)) {
+            if (randomRange(0, 1) == 1) {
+                if (!super.move(1, 1)) {
+                    super.move(1, -1);
+                }
+            } else {
+                if (!super.move(1, -1)) {
+                    super.move(1, 1);
+                }
+            }
+        }
     }
 }
 
@@ -69,7 +141,8 @@ class Plant extends Solid {
     constructor() {
         super();
         this.name = "Plant";
-        this.color = 'green';
+        this.color = ['green'];
+        this.movable = false;
     }
     
     update() {
@@ -88,7 +161,7 @@ class Wood extends Solid {
     constructor() {
         super();
         this.name = "Wood";
-        this.color = 'brown';
+        this.color = ['brown'];
     }
 
     update() {
@@ -104,15 +177,25 @@ class Water extends Liquid {
     constructor() {
         super();
         this.name = "Water";
-        this.color = 'blue';
+        this.colors = ["blue", "#2f35eb", "#1d23cf"];
+        this.density = 1000;
+
+        this.init();
     }
 
     update() {
-        if (!checkOccupied(x + 1, y)) {
-            moveDown(x, y);
-        } else {
-            moveSideways(x, y);
+        if (!super.move(1, 0)) {
+            if (randomRange(0, 1) == 1) {
+                if (!super.move(0, 1)) {
+                }
+            } else {
+                if (!super.move(0, -1)) {
+                }
+            }
         }
+
+        super.colorMove();
+
     }
 }
 
@@ -124,7 +207,7 @@ class Smoke extends Gas {
     constructor() {
         super();
         this.name = "Smoke";
-        this.color = 'grey';
+        this.color = ['grey'];
     }
 
     update() {
@@ -151,7 +234,7 @@ class Steam extends Gas {
     constructor() {
         super();
         this.name = "Steam";
-        this.color = '#e7e7e7';
+        this.color = ['#e7e7e7'];
     }
 
     update() {
@@ -183,7 +266,7 @@ class Fire extends Plasma {
     constructor() {
         super();
         this.name = "Fire";
-        this.color = 'red';
+        this.color = ['red'];
     }
 
     update() {
@@ -221,7 +304,7 @@ class Air extends Element {
     constructor() {
         super();
         this.name = "Air";
-        this.color = '#ccc';
+        this.color = ['#ccc'];
     }
 
     update() {

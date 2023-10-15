@@ -13,6 +13,7 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
+
     <div id="menu">
         <label for = "element"> 
             Choose element:
@@ -27,6 +28,12 @@
             <option value = "Steam">Steam</option>
         </select>
     </div>
+
+    <div>
+        <input type="range" id="range" name="range" min="1" max="8" value="1"/>
+        <label for="range">Range</label>
+    </div>
+
     <script src="util.js"></script>
     <script src="movement.js"></script>
     <script src="element.js"></script>
